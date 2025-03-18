@@ -1,0 +1,574 @@
+{% extends "adminpannel.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Base Styles */
+    :root {
+        --primary-color: #536a83;
+        --primary-hover-color: #435467;
+        --background-color: #f8f9fa;
+        --font-family: 'Segoe UI', Arial, sans-serif;
+        --text-color: #333;
+        --border-color: #eaedf0;
+        --box-shadow: 0 8px 24px rgba(83, 106, 131, 0.12);
+    }
+
+    body {
+        background-color: var(--background-color);
+        font-family: var(--font-family);
+        color: var(--text-color);
+    }
+
+    .container {
+        margin: 30px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: var(--box-shadow);
+        max-width: 1280px;
+        transition: all 0.3s ease;
+    }
+
+    /* Typography */
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 25px;
+        font-weight: 700;
+        font-size: 30px;
+        position: relative;
+        padding-bottom: 12px;
+    }
+
+    h1:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background: var(--primary-color);
+        border-radius: 3px;
+    }
+
+    /* Table Styles */
+    .table-container {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: white;
+    }
+
+    .table th, .table td {
+        padding: 16px;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .table-bordered {
+        border: none;
+    }
+
+    .table-bordered th, .table-bordered td {
+        border: 1px solid var(--border-color);
+        border-top: none;
+        border-left: none;
+    }
+
+    .table-bordered tr:last-child td {
+        border-bottom: none;
+    }
+
+    .table-bordered td:last-child, .table-bordered th:last-child {
+        border-right: none;
+    }
+
+    .table-hover tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(83, 106, 131, 0.04);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Table Headers */
+    .table-dark {
+        background: linear-gradient(135deg, var(--primary-color), #3d5066) !important;
+        color: white;
+    }
+
+    .table-dark th {
+        border: none;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 18px 16px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        position: relative;
+    }
+
+    .table-dark th:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 16px;
+        right: 16px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Images */
+    .image-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .table img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .table img:hover {
+        transform: scale(2);
+        z-index: 100;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        border-color: var(--primary-color);
+    }
+
+    /* Buttons & Controls */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover-color));
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(67, 84, 103, 0.15);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--primary-hover-color), #364556);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(67, 84, 103, 0.2);
+    }
+
+    .btn-primary:active {
+        transform: translateY(1px);
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .search-box {
+        position: relative;
+        max-width: 300px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 10px 15px 10px 40px;
+        border: 1px solid #e1e5ea;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .search-box input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(83, 106, 131, 0.15);
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #adb5bd;
+    }
+
+    /* Video Links */
+    .video-links {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .video-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        background-color: #f1f3f5;
+        border-radius: 6px;
+        text-decoration: none;
+        color: var(--primary-color);
+        transition: all 0.3s;
+        border: 1px solid #e9ecef;
+        font-size: 13px;
+    }
+
+    .video-link:hover {
+        background-color: #e9ecef;
+        color: #3d5066;
+        border-color: #dee2e6;
+        transform: translateY(-2px);
+    }
+
+    .video-link i {
+        margin-right: 6px;
+        font-size: 14px;
+    }
+
+    /* Description and Location */
+    .description-cell {
+        max-width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .description-cell:hover {
+        white-space: normal;
+        overflow: visible;
+        z-index: 10;
+        background-color: #fff;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        padding: 15px;
+        margin: -15px;
+    }
+
+    .location-cell {
+        max-width: 200px;
+        line-height: 1.6;
+        white-space: normal;
+        word-wrap: break-word;
+        position: relative;
+    }
+
+    .location-cell:hover::after {
+        content: attr(data-full-location);
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 4px 8px;
+        border-radius: 4px;
+        white-space: pre-wrap;
+        z-index: 1000;
+    }
+
+    .location-cell .location-part {
+        display: inline;
+    }
+
+    .location-cell .location-separator {
+        color: #adb5bd;
+        margin: 0 3px;
+    }
+
+    /* Empty States */
+    .empty-state {
+        color: #adb5bd;
+        font-style: italic;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .no-records {
+        text-align: center;
+        padding: 30px;
+        color: #6c757d;
+    }
+
+    .no-records i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        color: #e1e5ea;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        gap: 5px;
+    }
+
+    .pagination .page-item .page-link {
+        color: var(--primary-color);
+        border: 1px solid #dee2e6;
+        padding: 8px 14px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-weight: 500;
+    }
+
+    .pagination .page-item .page-link:hover {
+        background-color: #f1f3f5;
+        border-color: #ced4da;
+    }
+
+    .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover-color));
+        border-color: var(--primary-hover-color);
+        color: white;
+        box-shadow: 0 2px 5px rgba(67, 84, 103, 0.2);
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #ced4da;
+        pointer-events: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .container {
+            padding: 20px;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+            margin: 15px;
+            border-radius: 8px;
+        }
+
+        .table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        h1 {
+            font-size: 24px;
+            padding-bottom: 10px;
+        }
+
+        h1:after {
+            width: 60px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .search-box {
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+
+    /* Hover Effects & Animations */
+    .fade-in {
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .table tbody tr {
+        animation: fadeIn 0.3s ease forwards;
+    }
+</style>
+
+<div class="container fade-in">
+    <h1>Facilities</h1>
+    
+    <div class="action-buttons">
+        <div class="search-box">
+            <i class="fa fa-search"></i>
+            <input type="text" placeholder="Search facilities..." id="facilitySearch">
+        </div>
+        
+        
+    </div>
+    
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th width="5%">ID</th>
+                        <th width="15%">Name</th>
+                        <th width="25%">Description</th>
+                        <th width="20%">Location</th>
+                        <th width="20%">Images</th>
+                        <th width="15%">Videos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for facility in facilities %}
+                    <tr>
+                        <td>{{ facility.id }}</td>
+                        <td><strong>{{ facility.name }}</strong></td>
+                        <td class="description-cell" title="{{ facility.description }}">
+                            {{ facility.description|truncatechars:100 }}
+                        </td>
+                        <td class="location-cell" data-full-location="{{ facility.city.name }}, {{ facility.district.name }}, {{ facility.state.name }}, {{ facility.country.name }}">
+                            {{ facility.city.name }} • {{ facility.district.name }} • {{ facility.state.name }} • {{ facility.country.name }}
+                        </td>
+                        <td>
+                            <div class="image-gallery">
+                                {% for image in facility.images.all %}
+                                <img src="{{ image.image.url }}" alt="Facility Image" title="Click to enlarge">
+                                {% empty %}
+                                <span class="empty-state"><i class="fa fa-image"></i> No images available</span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="video-links">
+                                {% for video in facility.videos.all %}
+                                <a href="{{ video.video_link }}" target="_blank" class="video-link" title="{{ video.video_link }}">
+                                    <i class="fa fa-video text-danger"></i> Video {{ forloop.counter }}
+                                </a>
+                                {% empty %}
+                                <span class="empty-state"><i class="fa fa-video-slash"></i> No videos available</span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="no-records">
+                            <i class="fa fa-folder-open"></i>
+                            <p>No facilities found. Click "Add New Facility" to create one.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First">
+                    <span aria-hidden="true"><i class="fa fa-angle-double-left"></i></span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true"><i class="fa fa-angle-left"></i></span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fa fa-angle-double-left"></i></span>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fa fa-angle-left"></i></span>
+            </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true"><i class="fa fa-angle-right"></i></span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                    <span aria-hidden="true"><i class="fa fa-angle-double-right"></i></span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fa fa-angle-right"></i></span>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fa fa-angle-double-right"></i></span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<script>
+    // Search functionality
+    document.getElementById('facilitySearch').addEventListener('keyup', function() {
+        const searchValue = this.value.toLowerCase();
+        const tableRows = document.querySelectorAll('tbody tr');
+        
+        tableRows.forEach(row => {
+            let found = false;
+            const cells = row.querySelectorAll('td');
+            
+            cells.forEach(cell => {
+                if (cell.textContent.toLowerCase().includes(searchValue)) {
+                    found = true;
+                }
+            });
+            
+            if (found) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Animation for rows
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach((row, index) => {
+            row.style.animationDelay = (index * 0.05) + 's';
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Articles</title>
+</head>
+<body>
+    <h2>Articles</h2>
+    <a href="{% url 'add_article' %}">Add New Article</a>
+    <ul>
+        {% for article in articles %}
+        <li>
+            <h3>{{ article.article_name }}</h3>
+            <img src="{{ article.article_image.url }}" width="100" alt="Article Image">
+            <p>{{ article.article_description }}</p>
+            <a href="{% url 'edit_article' article.id %}">Edit</a>
+            <a href="{% url 'delete_article' article.id %}" onclick="return confirm('Are you sure you want to delete this article?');">Delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

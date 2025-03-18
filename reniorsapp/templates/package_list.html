@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Package List</title>
+</head>
+<body>
+    <h2>Package List</h2>
+    <a href="{% url 'add_package' %}">Add New Package</a>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Details</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        {% for package in packages %}
+        <tr>
+            <td>{{ package.name }}</td>
+            <td>{{ package.details }}</td>
+            <td>{{ package.price }}</td>
+            <td>
+                <a href="{% url 'edit_package' package.id %}">Edit</a> |
+                <a href="{% url 'delete_package' package.id %}" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

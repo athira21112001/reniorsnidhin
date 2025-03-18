@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package Enquiries Report</title>
+</head>
+<body>
+    <h1>Package Enquiries Report</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile Number</th>
+                <th>Country</th>
+                <th>State</th>
+                <th>District</th>
+                <th>City</th>
+                <th>Package</th>
+                <th>Enquiry Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enquiry in package_enquiries %}
+                <tr>
+                    <td>{{ enquiry.name }}</td>
+                    <td>{{ enquiry.email }}</td>
+                    <td>{{ enquiry.mobile_number }}</td>
+                    <td>{{ enquiry.country.name }}</td>
+                    <td>{{ enquiry.state.name }}</td>
+                    <td>{{ enquiry.district.name }}</td>
+                    <td>{{ enquiry.city.name }}</td>
+                    <td>{{ enquiry.package.name }}</td>
+                    <td>{{ enquiry.enquiry_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

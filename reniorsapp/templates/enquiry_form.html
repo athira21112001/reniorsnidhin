@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquiry Form</title>
+</head>
+<body>
+    <h1>Enquiry Form</h1>
+    <form method="post" action="{% url 'submit_enquiry' %}">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="mobile_number">Mobile Number:</label>
+        <input type="text" id="mobile_number" name="mobile_number" required><br><br>
+        
+        <label for="country">Country:</label>
+        <select id="country" name="country" required>
+            <option value="">Select Country</option>
+            {% for country in countries %}
+                <option value="{{ country.id }}">{{ country.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <label for="state">State:</label>
+        <select id="state" name="state" required>
+            <option value="">Select State</option>
+            {% for state in states %}
+                <option value="{{ state.id }}">{{ state.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <label for="district">District:</label>
+        <select id="district" name="district" required>
+            <option value="">Select District</option>
+            {% for district in districts %}
+                <option value="{{ district.id }}">{{ district.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <label for="city">City:</label>
+        <select id="city" name="city" required>
+            <option value="">Select City</option>
+            {% for city in cities %}
+                <option value="{{ city.id }}">{{ city.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <label for="quick_service">Quick Service:</label>
+        <select id="quick_service" name="quick_service">
+            <option value="">Select Quick Service</option>
+            {% for quick_service in quick_services %}
+                <option value="{{ quick_service.id }}">{{ quick_service.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <label for="facility">Facility:</label>
+        <select id="facility" name="facility">
+            <option value="">Select Facility</option>
+            {% for facility in facilities %}
+                <option value="{{ facility.id }}">{{ facility.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <label for="package">Package:</label>
+        <select id="package" name="package">
+            <option value="">Select Package</option>
+            {% for package in packages %}
+                <option value="{{ package.id }}">{{ package.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

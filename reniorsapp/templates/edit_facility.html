@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Facility</title>
+</head>
+<body>
+    <h2>Edit Facility</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Facility Name:</label><br>
+        <input type="text" name="name" value="{{ facility.name }}" required><br><br>
+
+        <label>Country:</label><br>
+        <select name="country" required>
+            {% for country in countries %}
+            <option value="{{ country.id }}" {% if country.id == facility.country.id %}selected{% endif %}>{{ country.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>State:</label><br>
+        <select name="state" required>
+            {% for state in states %}
+            <option value="{{ state.id }}" {% if state.id == facility.state.id %}selected{% endif %}>{{ state.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>District:</label><br>
+        <select name="district" required>
+            {% for district in districts %}
+            <option value="{{ district.id }}" {% if district.id == facility.district.id %}selected{% endif %}>{{ district.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>City:</label><br>
+        <select name="city" required>
+            {% for city in cities %}
+            <option value="{{ city.id }}" {% if city.id == facility.city.id %}selected{% endif %}>{{ city.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Description:</label><br>
+        <textarea name="description" required>{{ facility.description }}</textarea><br><br>
+
+        <label>Existing Images:</label><br>
+        {% for image in images %}
+            <img src="{{ image.image.url }}" width="100"><br>
+        {% endfor %}
+        <br>
+        <label>Upload New Images (Max 10):</label><br>
+        <input type="file" name="images[]" multiple><br><br>
+
+        <label>Existing Videos:</label><br>
+        {% for video in videos %}
+            <p>{{ video.video_link }}</p>
+        {% endfor %}
+        <br>
+        <label>Add New Video Links (Max 10):</label><br>
+        <textarea name="videos" placeholder="One per line"></textarea><br><br>
+
+        <button type="submit">Update Facility</button>
+    </form>
+</body>
+</html>
